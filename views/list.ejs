@@ -14,29 +14,23 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">TODOAPP</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-link" href="/write">Write</a>
-        <a class="nav-link" href="/list">List</a>
-      </div>
-    </div>
-  </nav>
+  <%- include('nav.html')%>
 
-  <ul class="list-group">
+  <div class="container input-group mt-2">
+    <input class="form-control" id ="search-input">
+    <button class="input-group-append btn btn-danger" id="search">검색</button>
+  </div>
+
+  <ul class="list-group container" style="margin-right:auto;margin-left:auto; padding:0px 15px 0px 15px;" >
     <% for(var i=0 ; i< posts.length;i++){ %>
-      <li class="list-group-item">
+      <li class="list-group-item mt-3" style=" border: 4px solid #f6f6f6; border-radius:15px;">
+        <h6>글 번호 : <%= posts[i]._id%></h6>
         <h4 class="my-3">할일 제목 : <%= posts[i].제목%>
         </h4>
         <p> 할일 마감 날짜 :<%= posts[i].날짜%>
         </p>
-        <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
+        <button type="button" class="delete btn btn-danger" style="border:1px solid #f3f3f3" data-id="<%= posts[i]._id %>">삭제</button>
+        <a style="float:right; margin-top:5px;" href="/edit/<%=posts[i]._id%>">수정</a>
       </li>
       <%}%>
   </ul>
@@ -81,6 +75,14 @@
       }).fail(function (xhr, textStatus, errorThrown) {
         console.log(xhr, textStatus, errorThrown)
       })
+    })
+
+    $('#search').click(function(){
+      // <input>에 입력한 값
+      var searchInput = $('#search-input').val()
+      // url을 이걸로 갈아치워주세요
+      // 버튼 누르면 /search로 이동
+      window.location.replace('/search?value='+searchInput)
     })
   </script>
 </body>
