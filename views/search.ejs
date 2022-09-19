@@ -1,0 +1,98 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <%- include('nav.html')%>
+
+        <div class="container input-group mt-2">
+            <input class="form-control" id="search-input">
+            <button class="input-group-append btn btn-danger" id="search">검색</button>
+        </div>
+
+        <ul class="list-group container" style="margin-right:auto;margin-left:auto; padding:0px 15px 0px 15px;">
+            <% for(var i=0 ; i< post.length;i++){ %>
+                <li class="list-group-item mt-3" style=" border: 4px solid #f6f6f6; border-radius:15px;">
+                    <h6>글 번호 : <%= post[i]._id%>
+                    </h6>
+                    <h4 class="my-3">할일 제목 : <%= post[i].제목%>
+                    </h4>
+                    <p> 할일 마감 날짜 :<%= post[i].날짜%>
+                    </p>
+                    <button type="button" class="delete btn btn-danger" style="border:1px solid #f3f3f3"
+                        data-id="<%= post[i]._id %>">삭제</button>
+                    <a style="float:right; margin-top:5px;" href="/edit/<%=post[i]._id%>">수정</a>
+                </li>
+                <%}%>
+        </ul>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+            crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+        <!-- script 순서 중요 -->
+
+        <script>
+            // 클래스가 delete인 요소를 클릭할시 
+            $('.delete').click(function (e) {
+
+                // e.target = 지금 누른 요소 (delete)
+                // dataset.id = 내가 누른 요소의 data-id
+                var textNumber = e.target.dataset.id;
+
+                // 이벤트가 동작하는 곳 , 위에거랑 거의 비슷함
+                var event = $(this);
+
+                //ajax 요청 함수
+                $.ajax({
+                    method: 'DELETE',
+                    url: '/delete',
+
+                    data: { _id: textNumber }
+
+                    // 코드 실행 성공시 콜백 함수
+                }).done(function (result) {
+                    // 개발자 도구 내부에 console 창에서 출력
+                    console.log('성공~!');
+
+                    // 지금 누른 요소의 부모 찾기
+                    // fadeOut() - > 애니메이션
+                    event.parent('li').fadeOut();
+
+                }).fail(function (xhr, textStatus, errorThrown) {
+                    console.log(xhr, textStatus, errorThrown)
+                })
+            })
+        </script>
+        <script>
+            $('#search').click(function () {
+                // <input>에 입력한 값
+                var searchInput = $('#search-input').val()
+                // url을 이걸로 갈아치워주세요
+                // 버튼 누르면 /search로 이동
+                window.location.replace('/search?value=' + searchInput)
+            })
+        </script>
+
+        <!-- var 자료 = {이름:'값',이름2:'값'}
+        $.param(자료)
+
+        $(폼 태그).serialize() -->
+</body>
+
+</html>
